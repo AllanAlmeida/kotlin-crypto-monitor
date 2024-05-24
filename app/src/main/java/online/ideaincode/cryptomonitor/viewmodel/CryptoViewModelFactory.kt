@@ -9,6 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+// Factory para criar instâncias de CryptoViewModel
 class CryptoViewModelFactory : ViewModelProvider.Factory {
     private fun createService(): CryptoService {
         val logging = HttpLoggingInterceptor()
@@ -30,7 +31,7 @@ class CryptoViewModelFactory : ViewModelProvider.Factory {
         return retrofit.create(CryptoService::class.java)
     }
 
-    override fun <T: ViewModel> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CryptoViewModel(service = createService()) as T
     }
 }

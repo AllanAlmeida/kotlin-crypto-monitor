@@ -18,7 +18,7 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: CryptoViewModel by viewModels{ CryptoViewModelFactory()}
+    private val viewModel: CryptoViewModel by viewModels { CryptoViewModelFactory() }
     private val textViewBitcoin: TextView by lazy { findViewById(R.id.textViewBitcoin) }
     private val textViewDate: TextView by lazy { findViewById(R.id.textViewDate) }
     private val buttonRefresh: Button by lazy { findViewById(R.id.buttonRefresh) }
@@ -28,26 +28,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.tickerLiveData.observe(this) {state ->
-            when(state) {
-
+        // Observa mudanças no LiveData do ViewModel
+        viewModel.tickerLiveData.observe(this) { state ->
+            when (state) {
                 is ScreenState.Loading -> {
                     progressBar.visibility = View.VISIBLE
                     buttonRefresh.visibility = View.GONE
                 }
-
                 is ScreenState.Success -> {
                     progressBar.visibility = View.GONE
                     buttonRefresh.visibility = View.VISIBLE
-
                     val lastPrice = state.data?.lastOrNull()?.last?.toBigDecimalOrNull()
                     textViewBitcoin.text = lastPrice?.let { price ->
                         NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(price)
                     } ?: "0"
-
                     textViewDate.text = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale("pt", "BR")).format(Date())
                 }
-
                 is ScreenState.Error -> {
                     progressBar.visibility = View.GONE
                     buttonRefresh.visibility = View.VISIBLE
@@ -56,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Configura o botão de atualização para buscar novos dados
         buttonRefresh.setOnClickListener {
             viewModel.fetch()
         }

@@ -1,5 +1,6 @@
 package online.ideaincode.cryptomonitor.service
 
+// Data class para representar um ticker individual
 data class Ticker(
     val pair: String,
     val high: String,
